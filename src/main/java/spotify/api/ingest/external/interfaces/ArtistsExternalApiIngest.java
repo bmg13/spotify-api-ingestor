@@ -1,6 +1,6 @@
 package spotify.api.ingest.external.interfaces;
 
-public interface ExternalApiIngest {
+public interface ArtistsExternalApiIngest {
 
     String retrieveSingleArtistDetails(String artistId, String auth);
 

@@ -1,7 +1,7 @@
 # Spotify API Ingestor
 
 ## Overview
- A SpringBoot service that retrieves data publicly availble on the Spotify API. This serves as simple demonstrator of how to use the Spotify API. Additionally, as an interesting note, this was developed on an iPad using GitHub's available dev tools.
+ A SpringBoot service that retrieves data publicly available on the Spotify API. This serves as simple demonstrator of how to use the Spotify API. Additionally, as an interesting note, this was developed on an iPad using GitHub's available dev tools.
 
 ### Obtain Spotify Dev Credentials
 
@@ -12,6 +12,10 @@ https://developer.spotify.com/documentation/web-api/quick-start/
 https://developer.spotify.com/dashboard
 
 ## API usage
+
+### Check usage
+
+https://developer.spotify.com/dashboard/applications/<ID>
 
 #### Get the Token to be used in the following requests
 https://developer.spotify.com/documentation/general/guides/authorization/client-credentials/
@@ -35,6 +39,8 @@ Authorization: Bearer <TOKEN RETRIEVED FROM TOKEN API>
 Content-Type: application/json
 Cache-Control: no-cache
 ```
+
+## Artists
 
 ### GET an artist
 
@@ -67,6 +73,32 @@ Host: localhost:8080
 Cache-Control: no-cache
 ```
 
+## Users
+
+### Get followed artists
+
+```
+GET /ingest/user/followed-artists/auth/<AUTH> HTTP/1.1
+Host: localhost:8080
+Cache-Control: no-cache
+```
+
+### Get User profile
+
+```
+GET /ingest/user/<USER_ID>/auth/<AUTH> HTTP/1.1
+Host: localhost:8080
+Cache-Control: no-cache
+```
+
+### Get User top artists
+
+```
+GET /ingest/user/top-artists/auth/<AUTH> HTTP/1.1
+Host: localhost:8080
+Cache-Control: no-cache
+```
+
 
 #### Test the API
 
@@ -74,9 +106,17 @@ Black Keys Artist id: 7mnBLXK823vNxN3UWB7Gfz
 Shawn James Artist id: 2HPYUQ6GsPbZHvkyYe2jdm
 Jungle Artist id: 59oA5WbbQvomJz2BuRG071
 
+## Future improvements
+- Retrieve and manage token in application;
+- Add testing;
+- Add documentation (specially in interfaces);
+- Create models for API responses and DTO's;
+- Reply to client accordingly (ex: token expired instead of 500);
+- Prints showing usage and responses;
 
 ## References
 
 - https://developer.spotify.com/documentation/web-api/
-- https://developer.spotify.com/documentation/web-api/reference/#/  
+- https://developer.spotify.com/console/
+- https://developer.spotify.com/documentation/general/guides/authorization/code-flow/
 - https://medium.com/@ow/the-2021-guide-to-coding-on-an-ipad-pro-5428d062c5ff

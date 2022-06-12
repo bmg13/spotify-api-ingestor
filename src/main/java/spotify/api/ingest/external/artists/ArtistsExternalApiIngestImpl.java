@@ -1,27 +1,25 @@
-package spotify.api.ingest.external;
+package spotify.api.ingest.external.artists;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import spotify.api.ingest.external.interfaces.ExternalApiIngest;
+import spotify.api.ingest.external.RequestEntityBuilder;
+import spotify.api.ingest.external.interfaces.ArtistsExternalApiIngest;
 
 @Service
-public class ExternalApiIngestImpl implements ExternalApiIngest {
+public class ArtistsExternalApiIngestImpl implements ArtistsExternalApiIngest {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ExternalApiIngestImpl.class);
-    private static final String CONTENT_TYPE = "application/json";
+    private static final Logger LOGGER = LoggerFactory.getLogger(ArtistsExternalApiIngestImpl.class);
     private static final String ARTISTS_BASE_URL = "https://api.spotify.com/v1/artists/";
 
     private RestTemplate restTemplate;
 
     @Autowired
-    public ExternalApiIngestImpl(final RestTemplate restTemplate) {
+    public ArtistsExternalApiIngestImpl(final RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
@@ -31,7 +29,7 @@ public class ExternalApiIngestImpl implements ExternalApiIngest {
                 = this.restTemplate.exchange(
                 ARTISTS_BASE_URL + artistId,
                 HttpMethod.GET,
-                buildRequestEntity(auth),
+                RequestEntityBuilder.buildRequestEntity(auth),
                 String.class);
 
         LOGGER.info("Response: code: {}, body: {}", response.getStatusCodeValue(), response.getBody());
@@ -44,7 +42,7 @@ public class ExternalApiIngestImpl implements ExternalApiIngest {
                 = this.restTemplate.exchange(
                 ARTISTS_BASE_URL + artistId + "/top-tracks?market=" + countryCode,
                 HttpMethod.GET,
-                buildRequestEntity(auth),
+                RequestEntityBuilder.buildRequestEntity(auth),
                 String.class);
 
         LOGGER.info("Response: code: {}, body: {}", response.getStatusCodeValue(), response.getBody());
@@ -57,17 +55,10 @@ public class ExternalApiIngestImpl implements ExternalApiIngest {
                 = this.restTemplate.exchange(
                 ARTISTS_BASE_URL + artistId + "/related-artists",
                 HttpMethod.GET,
-                buildRequestEntity(auth),
+                RequestEntityBuilder.buildRequestEntity(auth),
                 String.class);
 
         LOGGER.info("Response: code: {}, body: {}", response.getStatusCodeValue(), response.getBody());
         return response.getBody();
-    }
-
-    private HttpEntity<Void> buildRequestEntity(String auth){
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", auth);
-        headers.set("Content-Type", CONTENT_TYPE);
-        return new HttpEntity<>(headers);
     }
 }

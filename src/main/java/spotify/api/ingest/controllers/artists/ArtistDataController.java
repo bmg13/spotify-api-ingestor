@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import spotify.api.ingest.services.artists.ArtistDataServiceImpl;
+import spotify.api.ingest.services.interfaces.ArtistDataService;
 
 @CrossOrigin(maxAge = 3600)
 @Controller
@@ -19,23 +19,23 @@ public class ArtistDataController {
 
     private static final String BEARER = "Bearer ";
 
-    private ArtistDataServiceImpl ingestService;
+    private ArtistDataService artistDataService;
 
     @Autowired
-    public ArtistDataController(ArtistDataServiceImpl ingestService){
-        this.ingestService = ingestService;
+    public ArtistDataController(ArtistDataService artistDataService){
+        this.artistDataService = artistDataService;
     }
 
     @GetMapping(path = "/{artistId}/auth/{auth}")
     public ResponseEntity<String> getSingleArtist(@PathVariable String artistId, @PathVariable String auth) {
-        return ResponseEntity.ok(this.ingestService.retrieveSingleArtist(artistId, BEARER + auth));
+        return ResponseEntity.ok(this.artistDataService.retrieveSingleArtist(artistId, BEARER + auth));
     }
 
     @GetMapping(path = "/{artistId}/country/{countryCode}/auth/{auth}")
-    public ResponseEntity<String> getSingleArtist(@PathVariable String artistId,
+    public ResponseEntity<String> getSingleArtistTopTracksInCountry(@PathVariable String artistId,
                                                   @PathVariable String countryCode,
                                                   @PathVariable String auth) {
-        return ResponseEntity.ok(this.ingestService.retrieveSingleArtistTopTracksInSpecificCountry(
+        return ResponseEntity.ok(this.artistDataService.retrieveSingleArtistTopTracksInSpecificCountry(
                 artistId,
                 countryCode,
                  BEARER + auth));
@@ -43,7 +43,7 @@ public class ArtistDataController {
 
     @GetMapping(path = "/{artistId}/related-artists/auth/{auth}")
     public ResponseEntity<String> getSingleArtistRelatedArtists(@PathVariable String artistId, @PathVariable String auth) {
-        return ResponseEntity.ok(this.ingestService.retrieveSingleArtistRelatedArtists(
+        return ResponseEntity.ok(this.artistDataService.retrieveSingleArtistRelatedArtists(
                 artistId,
                 BEARER + auth));
     }
