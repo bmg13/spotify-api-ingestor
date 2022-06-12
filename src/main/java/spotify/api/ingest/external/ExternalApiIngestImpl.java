@@ -9,12 +9,14 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import spotify.api.ingest.external.interfaces.ExternalApiIngest;
 
 @Service
-public class ExternalApiIngestImpl implements ExternalApiIngest{
+public class ExternalApiIngestImpl implements ExternalApiIngest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExternalApiIngestImpl.class);
     private static final String CONTENT_TYPE = "application/json";
+    private static final String ARTISTS_BASE_URL = "https://api.spotify.com/v1/artists/";
 
     private RestTemplate restTemplate;
 
@@ -27,7 +29,33 @@ public class ExternalApiIngestImpl implements ExternalApiIngest{
     public String retrieveSingleArtistDetails(String artistId, String auth) {
         ResponseEntity<String> response
                 = this.restTemplate.exchange(
-                        "https://api.spotify.com/v1/artists/"+artistId,
+                ARTISTS_BASE_URL + artistId,
+                HttpMethod.GET,
+                buildRequestEntity(auth),
+                String.class);
+
+        LOGGER.info("Response: code: {}, body: {}", response.getStatusCodeValue(), response.getBody());
+        return response.getBody();
+    }
+
+    @Override
+    public String retrieveSingleArtistTopTracksForCountry(String artistId, String countryCode, String auth) {
+        ResponseEntity<String> response
+                = this.restTemplate.exchange(
+                ARTISTS_BASE_URL + artistId + "/top-tracks?market=" + countryCode,
+                HttpMethod.GET,
+                buildRequestEntity(auth),
+                String.class);
+
+        LOGGER.info("Response: code: {}, body: {}", response.getStatusCodeValue(), response.getBody());
+        return response.getBody();
+    }
+
+    @Override
+    public String retrieveSingleArtistRelatedArtists(String artistId, String auth) {
+        ResponseEntity<String> response
+                = this.restTemplate.exchange(
+                ARTISTS_BASE_URL + artistId + "/related-artists",
                 HttpMethod.GET,
                 buildRequestEntity(auth),
                 String.class);
