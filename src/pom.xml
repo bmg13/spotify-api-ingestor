@@ -22,6 +22,7 @@
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
         <java.version>1.8</java.version>
+        <start-class>spotify.api.ingest.SpotifyApiIngestApplication</start-class>
     </properties>
 
     <dependencies>
