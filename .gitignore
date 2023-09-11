@@ -31,3 +31,9 @@ build/
 
 ### VS Code ###
 .vscode/
+
+../.DS_Store
+.DS_Store
+main/.DS_Store
+main/java/.DS_Store
+main/java/spotify/.DS_Store
